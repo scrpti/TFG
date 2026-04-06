@@ -1,0 +1,14 @@
+# Go
+bin/
+*.exe
+*.test
+*.out
+
+# Environment
+.env
+
+# Uploads
+uploads/
+
+# OS
+.DS_Store
