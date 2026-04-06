@@ -58,3 +58,43 @@ func (r *PatientRepository) GetByID(id string) (*models.Patient, error){
 
 	return &patient, nil
 }
+
+//Funcion GetAll
+
+func (r* PatientRepository) GetAll() ([]models.Patient, error) {
+	query := `
+		SELECT id, full_name, identifier, created_at
+		FROM patients
+		ORDER BY created_at DESC
+	`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var patients []models.Patient
+
+	for rows.Next(){
+		var patient models.Patient
+
+		err := rows.Scan(
+			&patient.ID,
+			&patient.FullName,
+			&patient.Identifier,
+			&patient.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		patients = append(patients, patient)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return patient, nil
+}
