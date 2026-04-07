@@ -21,6 +21,11 @@ import (
 
 	"tfg/internal/config"
 	"tfg/internal/db"
+
+	"tfg/internal/repository"
+	"tfg/internal/service"
+	"tfg/internal/handlers"
+	"tfg/internal/routes"
 )
 
 func main() {
@@ -40,15 +45,12 @@ func main() {
 	}
 	defer database.Close()
 
+	patientRepo := repository.NewPatientRepository(database)
+	patientService := service.NewPatientService(patientRepo)
+	patientHandler := handlers.NewPatientHandler(patientService)
+
 	router := gin.Default()
-
-	// Ruta de health (/health)
-
-	router.GET("/health", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"status" : "ok",
-		})
-	})
+	routes.RegisterRoutes(router, patientHandler)
 
 	//Arrancar el servidor
 

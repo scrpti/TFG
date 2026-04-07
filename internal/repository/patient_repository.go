@@ -11,7 +11,7 @@ type PatientRepository struct {
 
 func NewPatientRepository(db *sql.DB) *PatientRepository {
 	return &PatientRepository{
-		db: db
+		db: db,
 	}
 }
 
@@ -28,8 +28,9 @@ func (r *PatientRepository) Create(patient models.Patient) error {
 		patient.ID,
 		patient.FullName,
 		patient.Identifier,
-		patient.CreatedAt
+		patient.CreatedAt,
 	)
+	return err
 }
 
 //Funcion GetByID
@@ -96,5 +97,5 @@ func (r* PatientRepository) GetAll() ([]models.Patient, error) {
 		return nil, err
 	}
 
-	return patient, nil
+	return patients, nil
 }

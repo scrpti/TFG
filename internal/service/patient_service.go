@@ -1,25 +1,38 @@
 package service
 
 import (
-	"tfg/internal/models"
-	"tfg/internal/repository"
 	"time"
+
 	"github.com/google/uuid"
+
+	"tfg/internal/models"
 )
 
-type PatientService struct {
-	repo *repository.PatientRepository
+type PatientRepository interface {
+	Create(patient models.Patient) error
+	GetByID(id string) (*models.Patient, error)
+	GetAll() ([]models.Patient, error)
 }
 
-func NewPatientService(repo *repository.PatientRepository) *PatientService {
-	return &PatientService{
+type PatientService interface {
+	Create(patient models.Patient) (*models.Patient, error)
+	GetByID(id string) (*models.Patient, error)
+	GetAll() ([]models.Patient, error)
+}
+
+type patientService struct {
+	repo PatientRepository
+}
+
+func NewPatientService(repo PatientRepository) PatientService {
+	return &patientService{
 		repo: repo,
 	}
 }
 
-func (s *PatientService) Create(patient models.Patient) (*models.Patient, error) {
+func (s *patientService) Create(patient models.Patient) (*models.Patient, error) {
 	patient.ID = uuid.New().String()
-	patient.CreatedAt = time.now()
+	patient.CreatedAt = time.Now()
 
 	err := s.repo.Create(patient)
 	if err != nil {
@@ -29,10 +42,10 @@ func (s *PatientService) Create(patient models.Patient) (*models.Patient, error)
 	return &patient, nil
 }
 
-func (s *PatientService) GetByID(id string) (*models.Patient, error) {
+func (s *patientService) GetByID(id string) (*models.Patient, error) {
 	return s.repo.GetByID(id)
 }
 
-func (s *PatientService) GetAll() ([]models.Patient, error) {
-	return s.repo.getAll()
+func (s *patientService) GetAll() ([]models.Patient, error) {
+	return s.repo.GetAll()
 }
