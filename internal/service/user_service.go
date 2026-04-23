@@ -5,7 +5,7 @@ import (
 
 	"github.com/google/uuid"
 
-	"tfg/internal"
+	"tfg/internal/models"
 )
 
 type UserRepository interface {
@@ -24,7 +24,7 @@ type userService struct {
 	repo UserRepository
 }
 
-func NewUserService(repo UserRepository) UserRepository {
+func NewUserService(repo UserRepository) UserService {
 	return &userService{
 		repo: repo,
 	}

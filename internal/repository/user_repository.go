@@ -23,7 +23,7 @@ func (r *UserRepository) Create(user models.User) error {
 		VALUES ($1, $2, $3, $4, $5)
 	`
 
-	_, err = r.db.Exec(
+	_, err := r.db.Exec(
 		query,
 		user.ID,
 		user.FullName,

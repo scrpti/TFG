@@ -45,12 +45,20 @@ func main() {
 	}
 	defer database.Close()
 
+	// Inyeccion de las capsulas de Patient
 	patientRepo := repository.NewPatientRepository(database)
 	patientService := service.NewPatientService(patientRepo)
 	patientHandler := handlers.NewPatientHandler(patientService)
 
+	userRepo := repository.NewUserRepository(database)
+	userService := service.NewUserService(userRepo)
+	userHandler := handlers.NewUserHandler(userService)
+
+
+
 	router := gin.Default()
-	routes.RegisterRoutes(router, patientHandler)
+	//Ruta de patient
+	routes.RegisterRoutes(router, patientHandler, userHandler)
 
 	//Arrancar el servidor
 
