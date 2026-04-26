@@ -50,15 +50,20 @@ func main() {
 	patientService := service.NewPatientService(patientRepo)
 	patientHandler := handlers.NewPatientHandler(patientService)
 
+	// Inyeccion de las capsulas de User
 	userRepo := repository.NewUserRepository(database)
 	userService := service.NewUserService(userRepo)
 	userHandler := handlers.NewUserHandler(userService)
 
+	// Inyeccion de las capsulas de Document
+	documentRepo := repository.NewDocumentRepository(database)
+	documentService := service.NewDocumentService(documentRepo)
+	documentHandler := handlers.NewDocumentHandler(documentService)
 
 
 	router := gin.Default()
 	//Ruta de patient
-	routes.RegisterRoutes(router, patientHandler, userHandler)
+	routes.RegisterRoutes(router, patientHandler, userHandler, documentHandler)
 
 	//Arrancar el servidor
 

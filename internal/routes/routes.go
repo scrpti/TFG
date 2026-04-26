@@ -5,7 +5,8 @@ import (
 	"tfg/internal/handlers"
 )
 
-func RegisterRoutes(router *gin.Engine, patientHandler *handlers.PatientHandler, userHandler *handlers.UserHandler) {
+func RegisterRoutes(router *gin.Engine, patientHandler *handlers.PatientHandler, 
+					userHandler *handlers.UserHandler, documentHandler *handlers.DocumentHandler) {
 	// Ruta de health (/health)
 
 	router.GET("/health", func(c *gin.Context) {
@@ -25,4 +26,11 @@ func RegisterRoutes(router *gin.Engine, patientHandler *handlers.PatientHandler,
 	router.POST("/users", userHandler.Create)
 	router.GET("/users", userHandler.GetAll)
 	router.GET("/users/:id", userHandler.GetByID)
+
+	// Rutas de documents
+
+	router.POST("/documents", documentHandler.Create)
+	router.GET("/documents", documentHandler.GetAll)
+	router.GET("/documents/:id", documentHandler.GetByID)
+	router.GET("/documents/patient/:id", documentHandler.GetByPatientID)
 }

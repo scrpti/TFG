@@ -62,7 +62,7 @@ func (r *PatientRepository) GetByID(id string) (*models.Patient, error){
 
 //Funcion GetAll
 
-func (r* PatientRepository) GetAll() ([]models.Patient, error) {
+func (r *PatientRepository) GetAll() ([]models.Patient, error) {
 	query := `
 		SELECT id, full_name, identifier, created_at
 		FROM patients
