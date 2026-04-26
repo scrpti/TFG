@@ -20,19 +20,26 @@ func NewDocumentHandler(service service.DocumentService) *DocumentHandler {
 }
 
 func (h *DocumentHandler) Create(c *gin.Context) {
-	var document models.Document
-
-	if err := c.ShouldBindJSON(&document); err != nil {
+	file, err := c.FormFile("file")
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "invalid request body",
+			"error": "file is required",
 		})
 		return
 	}
 
-	createdDocument, err := h.service.Create(document)
+	document := models.Document{
+		PatientID: c.PostForm("patient_id"),
+		DoctorID: c.PostForm("doctor_id"),
+		HospitalID: c.PostForm("hospital_id"),
+		DocumentType: c.PostForm("document_type"),
+		FileName: file.Filename,
+	}
+
+	createdDocument, err := h.service.Create(document, file)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error" : "failed to create document",
+			"error" : err.Error(),
 		})
 		return
 	}

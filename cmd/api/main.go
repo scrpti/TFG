@@ -57,7 +57,7 @@ func main() {
 
 	// Inyeccion de las capsulas de Document
 	documentRepo := repository.NewDocumentRepository(database)
-	documentService := service.NewDocumentService(documentRepo)
+	documentService := service.NewDocumentService(documentRepo, cfg.Storage.UploadDir)
 	documentHandler := handlers.NewDocumentHandler(documentService)
 
 
