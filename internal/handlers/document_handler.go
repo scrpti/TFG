@@ -84,3 +84,16 @@ func (h *DocumentHandler) GetByPatientID(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, documents)
 }
+
+func (h *DocumentHandler) Verify(c *gin.Context) {
+	id := c.Param("id")
+
+	result, err := h.service.Verify(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "failed to verify document",
+		})
+		return
+	}
+	c.JSON(http.StatusOK, result)
+}

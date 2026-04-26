@@ -14,3 +14,12 @@ type Document struct {
 	Status string `json:"status"`
 	UploadedAt time.Time `json:"uploaded_at"`
 }
+
+// Modelo de respuesta para la verificacion de hash de un documento
+
+type DocumentVerificationResult struct {
+	DocumentID string `json:"document_id"`
+	StoredHash string `json:"stored_hash"`
+	CurrentHash string `json:"current_hash"`
+	Valid bool `json:"valid"`
+}

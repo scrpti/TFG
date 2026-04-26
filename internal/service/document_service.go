@@ -26,7 +26,7 @@ type DocumentService interface {
 	GetByID(id string) (*models.Document, error)
 	GetAll() ([]models.Document, error)
 	GetByPatientID(id string) ([]models.Document, error)
-
+	Verify(id string) (*models.DocumentVerificationResult, error)
 }
 
 type documentService struct{
@@ -94,4 +94,31 @@ func (s *documentService) GetAll() ([]models.Document, error) {
 
 func (s *documentService) GetByPatientID(id string) ([]models.Document, error) {
 	return s.repo.GetByPatientID(id)
+}
+
+//Verificacion del hash del documento para comprobar que no ha sido modificado
+
+func (s *documentService) Verify(id string) (*models.DocumentVerificationResult, error) {
+	document, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	data, err := os.ReadFile(document.FilePath)
+	if err != nil{
+		return nil, err
+	}
+
+	current_hash := crypto.CalculateSHA256(data)
+
+	valid := current_hash == document.Hash
+
+	result := &models.DocumentVerificationResult{
+		DocumentID: document.ID,
+		StoredHash: document.Hash,
+		CurrentHash: current_hash,
+		Valid: valid,
+	}
+
+	return result, nil
 }

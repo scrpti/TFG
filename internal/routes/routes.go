@@ -33,4 +33,5 @@ func RegisterRoutes(router *gin.Engine, patientHandler *handlers.PatientHandler,
 	router.GET("/documents", documentHandler.GetAll)
 	router.GET("/documents/:id", documentHandler.GetByID)
 	router.GET("/documents/patient/:id", documentHandler.GetByPatientID)
+	router.GET("/documents/:id/verify", documentHandler.Verify)
 }
